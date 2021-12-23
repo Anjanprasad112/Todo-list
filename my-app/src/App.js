@@ -1,6 +1,4 @@
-
 import './App.css';
-
 function App() {
   // let myvariable="Anjan Prasad"
   return (
