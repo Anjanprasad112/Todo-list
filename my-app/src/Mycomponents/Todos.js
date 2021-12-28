@@ -7,7 +7,10 @@ export const Todos = (props) => {
            <h2>TODO LIST</h2>
            {props.todos.length===0 ? "No Todos To Display" :
            props.todos.map((todo) =>{
-               return <TodoItem todo={todo} key={todo.sno} onDelete={props.onDelete}/>
+               return (
+               <>
+               <TodoItem todo={todo} key={todo.sno} onDelete={props.onDelete}/> <hr />
+               </>)
            })}
            
         </div>
