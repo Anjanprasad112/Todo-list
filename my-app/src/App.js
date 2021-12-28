@@ -1,26 +1,44 @@
 import './App.css';
 import Header from './Mycomponents/Header'
 import {Footer} from './Mycomponents/Footer'
+import {About} from './Mycomponents/About'
+
 // import {TodoItem} from './Mycomponents/TodoItem'
 import {Todos} from './Mycomponents/Todos'
 import {AddTodo} from './Mycomponents/AddTodo'
 
-import React, { useState } from 'react';
+import React, { useState,useEffect,Fragment } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+
 
 
 function App() {
+  let initTodo;
+  if(localStorage.getItem('todos')===null){
+    initTodo=[];
+  }
+  else{
+    initTodo= JSON.parse(localStorage.getItem('todos'));
+  }
   // let myvariable="Anjan Prasad"
   const onDelete=(todo)=>{
     console.log("I am Delete!! ",todo);
   
     setTodos(todos.filter((e)=>{
       return e!==todo;
+    
     }))
+    localStorage.setItem("todos",JSON.stringify(todos));
+    
   };
   const addTodo =(title,desc)=>{
     console.log("I am Adding this Todo ",title,desc);
     let sno;
-    if(todos.length==0){
+    if(todos.length===0){
       sno =0;
     }
     else{
@@ -33,30 +51,35 @@ function App() {
     }
     setTodos([...todos,myTodo]);
     console.log(myTodo)
-  }
+    }
 
-  const [todos, setTodos] = useState(
-  [
-  {sno : 1,
-    title : "Go to mail",
-    desc :"Your should go to mail to complete your work1"
-  },
-  {sno : 2,
-    title : "Go to menu",
-    desc : "Your should go to mail to complete your work2"
-  },
-  {sno:3,
-    title: "Go to Home",
-    desc: "Your should go to mail to complete your work3"
-  }
-  ]);
+  const [todos, setTodos] = useState([initTodo]);
+  useEffect(() => {
+    localStorage.setItem("todos",JSON.stringify(todos));
+  }, [todos])
   return (
     <>
+    <Router>
     <Header title={"MyTodoList"} SearchBar={true}/>
-    <AddTodo addTodo={addTodo}/>
-    <Todos todos={todos} onDelete={onDelete}/>
-    {/* <TodoItem/> */}
+
+    <Switch>
+      
+          <Route path="/" render={() =>{
+            return(
+              <>
+              <AddTodo addTodo={addTodo}/>
+              <Todos todos={todos} onDelete={onDelete}/>
+              </>)
+          }
+          }>
+            </Route>
+          <Route  path="/about">
+            <About />
+          </Route>
+         
+    </Switch>
     <Footer/>
+    </Router>
     </>
   )
 }
